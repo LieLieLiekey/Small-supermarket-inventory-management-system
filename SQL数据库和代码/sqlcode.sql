@@ -1,21 +1,21 @@
 create database Supermarket
 use Supermarket
 create table Commodity(
-commodity_no varchar(10) primary key,/*ÉÌÆ·±àºÅ*/
-commodity__name varchar(20),/*ÉÌÆ·Ãû³Æ*/
-commodity__type1 varchar(10),/*ÉÌÆ·ÀàĞÍ*/
-commodity__size varchar(5),/*ÉÌÆ·¹æ¸ñ*/
-commodity__sprice float,/*ÊÛ¼Û*/
-commodity__mdate datetime,/*Éú²úÈÕÆÚ*/
-commodity__edate datetime,/*±£ÖÊÆÚ*/
-commodity__quantity int,/*¿â´æÊıÁ¿*/
+commodity_no varchar(10) primary key,/*å•†å“ç¼–å·*/
+commodity__name varchar(20),/*å•†å“åç§°*/
+commodity__type1 varchar(10),/*å•†å“ç±»å‹*/
+commodity__size varchar(5),/*å•†å“è§„æ ¼*/
+commodity__sprice float,/*å”®ä»·*/
+commodity__mdate datetime,/*ç”Ÿäº§æ—¥æœŸ*/
+commodity__edate datetime,/*ä¿è´¨æœŸ*/
+commodity__quantity int,/*åº“å­˜æ•°é‡*/
 )
 
-insert into Commodity values('0000000001','ÄÌÏãÇúÆæ±ı¸É','±ı¸É','´ü',7,'2018-12-23 00:00:00.000','2019-02-04 00:00:00.000,150')
+insert into Commodity values('0000000001','å¥¶é¦™æ›²å¥‡é¥¼å¹²','é¥¼å¹²','è¢‹',7,'2018-12-23 00:00:00.000','2019-02-04 00:00:00.000,150')
 
 go
 CREATE TABLE Cashier(
-cashier_no varchar(10) primary key,/*Ô±¹¤±àºÅ*/
+cashier_no varchar(10) primary key,/*å‘˜å·¥ç¼–å·*/
 cashier_name varchar(10),
 cashier_pwd varchar(10),
 cashier_sex char(2),
@@ -26,12 +26,12 @@ cashier_phone varchar(11),
 )
 
 
-insert into Commodity values('000004','Ğ¡Íõ','12345678','ÄĞ',14,'2019 02 03','2019 03 04',10)
-insert into Commodity values('000005','Ğ¡ºì','12345678','Å®',20.0,'2019 02 10','2019 03 10',100)
+insert into Commodity values('000004','å°ç‹','12345678','ç”·',14,'2019 02 03','2019 03 04',10)
+insert into Commodity values('000005','å°çº¢','12345678','å¥³',20.0,'2019 02 10','2019 03 10',100)
 
 go 
 create table Purchaser(
-purchaser_no varchar(10) primary key,/*Ô±¹¤±àºÅ*/
+purchaser_no varchar(10) primary key,/*å‘˜å·¥ç¼–å·*/
 purchaser_name varchar(10),
 purchaser_sex char(2),
 purchaser_age int,
@@ -58,8 +58,8 @@ cashier_no varchar(10),
 commodity_no varchar(10),
 sell_no varchar(8),
 sell_quantity int,
-sell_price float,/*Ó¦ÊÕ½ğ¶î*/
-sell_rmoney float,/*ÊµÊÕ½ğ¶î*/
+sell_price float,/*åº”æ”¶é‡‘é¢*/
+sell_rmoney float,/*å®æ”¶é‡‘é¢*/
 sell_date datetime,
 primary key(sell_no),
 foreign key(cashier_no ) references cashier(cashier_no ) on delete set null,
@@ -77,6 +77,45 @@ primary key (admin_no)
 )
 
 
-insert into Administrator values('001','123456','Â¥ÏÂĞ¡ºÚ','110','±±¾©ÊĞº£µíÇø´óÍ¬Â·6ºÅ')
+insert into Administrator values('001','123456','æ¥¼ä¸‹å°é»‘','110','åŒ—äº¬å¸‚æµ·æ·€åŒºå¤§åŒè·¯6å·')
 
-insert into Administrator values('dch','123456','¸ô±ÚÀÏÍõ','110','±±¾©ÊĞº£µíÇø´óÍ¬Â·5ºÅ')
+insert into Administrator values('dch','123456','éš”å£è€ç‹','110','åŒ—äº¬å¸‚æµ·æ·€åŒºå¤§åŒè·¯5å·')
+
+
+/*Sellè¡¨çº§è”åˆ é™¤è§¦å‘å™¨*/
+CREATE TRIGGER Delete_sellcommodity
+ON Commodity
+FOR DELETE
+AS
+DELETE Sell
+FROM deleted
+WHERE Sell.commodity_no=deleted.commodity_no
+
+/*Sellè¡¨çº§è”åˆ é™¤è§¦å‘å™¨*/
+CREATE TRIGGER Delete_sellcashier
+ON Cashier
+FOR DELETE
+AS
+DELETE Sell
+FROM deleted
+WHERE Sell.cashier_no=deleted.cashier_no
+
+
+/*Stockè¡¨çº§è”åˆ é™¤è§¦å‘å™¨*/
+CREATE TRIGGER Delete_stockCommodity
+ON Commodity
+FOR DELETE
+AS
+DELETE Stock
+FROM deleted
+WHERE Stock.commodity_no=deleted.commodity_no
+
+
+/*Stockè¡¨çº§è”åˆ é™¤è§¦å‘å™¨*/
+CREATE TRIGGER Delete_stockpurchaser
+ON Purchaser
+FOR DELETE
+AS
+DELETE Stock
+FROM deleted
+WHERE Stock.purchaser_no=deleted.purchaser_no
