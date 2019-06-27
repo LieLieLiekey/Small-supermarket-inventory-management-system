@@ -1,0 +1,5 @@
+setuptools
+pefile>=2017.8.1
+macholib>=1.8
+altgraph
+pywin32-ctypes
