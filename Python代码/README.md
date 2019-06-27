@@ -16,3 +16,5 @@
 
 
 **运行程序时，只需将这些py放在放在同一目录，只需运行supermarketmanage.py文件,并且需要将sql server中的sa用户，密码改为123（或者自己在supermarmanage.py文件中将init函数内密码修改一下即可）**
+
+**引用的外部包有prettytable、pymssql**
